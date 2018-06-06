@@ -79,3 +79,6 @@
       }
     }
 
+通过remix + metamask 部署到Kovan Test Net
+
+在Google浏览器中安装 `MetaMask`插件
