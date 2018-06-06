@@ -12,7 +12,17 @@
 
 `sudo npm install ganache-cli`
 
-#### 安装web3.js
+老版: `sudo npm install ethereumjs-testrpc truffle`
 
-npm install web3
+#### 创建项目
+
+创建空文件夹：
+
+`truffle unbox react-box`
+
+静等5分钟...
+
+#### 项目结构
+
+con
 
