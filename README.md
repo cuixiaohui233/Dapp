@@ -24,5 +24,58 @@
 
 #### 项目结构
 
-con
+`contracts`:编写智能合约的文件夹，所有智能合约都放置这这个里面
+
+`migration`:部署合约配置的文件夹
+
+`src`:React 的前端调用代码
+
+`test`:只能合约测试用例文件夹
+
+#### 编写智能合约
+
+在`contract`文件夹下常见 Voting.sol 文件，拷贝以下代码：
+
+    pragma solidity ^0.4.4;
+
+    contract Voting {
+
+      // liyuechun -> 10
+      // xietingfeng -> 5
+      // liudehua -> 20
+      mapping (bytes32 => uint8) public votesReceived;
+
+      // 存储候选人名字的数组
+      bytes32[] public candidateList;
+
+      // 构造函数 初始化候选人名单
+      function Voting(bytes32[] candidateNames) {
+
+        candidateList = candidateNames;
+      }
+
+      // 查询某个候选人的总票数
+      function totalVotesFor(bytes32 candidate)  constant returns (uint8) {
+        require(validCandidate(candidate) == true);
+        // 或者
+        // assert(validCandidate(candidate) == true);
+        return votesReceived[candidate];
+      }
+
+      // 为某个候选人投票
+      function voteForCandidate(bytes32 candidate) {
+        assert(validCandidate(candidate) == true);
+        votesReceived[candidate] += 1;
+      }
+
+      // 检索投票的姓名是不是候选人的名字
+      function validCandidate(bytes32 candidate) constant returns (bool) {
+        for(uint i = 0; i < candidateList.length; i++) {
+          if (candidateList[i] == candidate) {
+            return true;
+          }
+        }
+        return false;
+      }
+    }
 
