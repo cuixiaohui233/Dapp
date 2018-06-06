@@ -79,6 +79,20 @@
       }
     }
 
-通过remix + metamask 部署到Kovan Test Net
+#### 通过remix + metamask 部署到Kovan Test Net
 
 在Google浏览器中安装 `MetaMask`插件
+
+打开 [remix-IDE](http://remix.ethereum.org/)将合约拷贝带里面
+
+##### 注意
+
+        1.MetaMask钱包一定是等于状态（？）,并且一定要有一定的以太币支付给旷工
+        
+        2.确保Environment是Injected Web3，如果切换不过来，关掉浏览器重新启动
+        
+        3.在create函数中输入一个数组，数组里面的内容为候选人名单
+        
+        4.点击create按钮，会弹出MetaMask界面让你确认，确认提交，过一会儿，合约就部署成功
+      
+        5.可以测试给某个候选人投票，查询某个候选人的票数
