@@ -99,4 +99,4 @@
         
 由于我的以太币还没有搞下来，so...以上
 
-如何搞到以太币，[查看链接](https://blog.csdn.net/fidelhl/article/details/52573274)
+如何搞到testnet以太币，[查看链接](https://blog.csdn.net/fidelhl/article/details/52573274)
