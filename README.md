@@ -43,7 +43,7 @@
 
 >#### 编写智能合约
 
-在`contract`文件夹下常见 Voting.sol 文件，这个就是将来要部署到以太坊官网上的合约，所以代码要精简，以为是要mani的，下面是个例子，拷贝以下代码：
+在`contract`文件夹下创建见 Voting.sol 文件，这个就是将来要部署到以太坊官网上的合约，所以代码要精简，以为是要钱的，下面是个例子，拷贝以下代码：
 
     pragma solidity ^0.4.4;
 
@@ -108,4 +108,4 @@
         
 由于我的以太币还没有搞下来，so...以上
 
-如何搞到testnet以太币，[查看链接](https://blog.csdn.net/fidelhl/article/details/52573274)
+如何搞到 Testnet 以太币，[查看链接](https://blog.csdn.net/fidelhl/article/details/52573274)
