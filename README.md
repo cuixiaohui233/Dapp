@@ -111,4 +111,10 @@
 如何搞到 Testnet 以太币，[查看链接](https://blog.csdn.net/fidelhl/article/details/52573274)
 
 我的测试币搞下来了，但是，在官方的编辑器上总是编译不了，太坑了，也没有好的解决方案，妈卖批
-        
+
+nnd,这个官方的编辑器炸了，靠腰，改用国内的编辑器，也可以正常部署，[点击](http://remix2.ju3ban.net)
+
+##### 接着
+在 Compile 之后，点击 ##### 接着在 Compile 之后，点击 Ru n
+##### 接着在 Compile 之后，点击
+    
