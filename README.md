@@ -104,6 +104,112 @@
 
 然后在App.js中调用:
 
+上代码：
+
+    import React, { Component } from 'react';// 壮哉我大 React
+    import SimpleStorageContract from '../build/contracts/Orders.json';//  引入 turffle compile 生成的 ABI 文件 
+    import getWeb3 from './utils/getWeb3';// 引入 web3，这个方便与以太坊节点进行交互，完全不用关心 JSON RPC 的实现细节，JSON RPC 是啥？就是与区块链数据交换的格式；
+    import axios from 'axios';// 请求数据的轻量级 AJAX
+
+    import './css/oswald.css'
+    import './css/open-sans.css'
+    import './css/pure-min.css'
+    import './App.css'
+
+    // 存储合约的地址（就是你在 remix 上部署好的合约地址）
+    const contractAddress = "0x18518ba64e05d685b7239a3d3f0b963b369b305f";
+
+    // 初始化合约实例
+    const simpleStorageInstance = null;
+    class App extends Component {
+      constructor(props) {
+        super(props)
+
+        this.state = {
+          storageValue: 0,
+          web3: null,
+          inputVal:''
+        }
+      }
+
+      componentWillMount() {
+        // 获取 web3 的实例
+        getWeb3
+        .then(results => {
+          this.setState({
+            web3: results.web3
+          })
+          this.instantiateContract()
+        })
+        .catch(() => {
+          console.log('Error finding web3.')
+        })
+      }
+
+      instantiateContract() {
+        const { web3 } = this.state;
+        // 引用 truffle-contract
+        const contract = require('truffle-contract')// 编译合约的
+        // 通过 abi 初始化合约对象
+        const simpleStorage = contract(SimpleStorageContract)
+        // 连接到以太坊的节点
+        simpleStorage.setProvider(web3.currentProvider)
+
+        console.log('连接成功', simpleStorage);
+        // 获取账户列表.异步的
+        web3.eth.getAccounts((error, accounts) => {
+          console.log('账户列表', accounts)
+          simpleStorage.at(contractAddress).then((instance) => {
+            simpleStorageInstance = instance
+            console.log('合约实例创建成功',simpleStorageInstance);
+            // 调用合约中的 writeOrder() 方法,设置一个值
+            return simpleStorageInstance.writeOrder(37249608,'cxh',1528878748, '15931662302', '1380', '12', {from: web3.eth.accounts[0]});
+          }).then((result) => {
+            console.log(result);
+            return simpleStorageInstance.writeOrder(37249609,'hxc',9285870876, '15931662302', '1380', '12', {from: web3.eth.accounts[0]});
+          }).then((result) => {
+            // 调用合约中的 get() 方法,获取值
+            console.log(result)
+            return simpleStorageInstance.readOrder.call(37249608);
+          }).then((result) => {
+            // 改变前端视图
+            console.log(result);
+            return this.setState({ storageValue: 123 });
+          })
+        })
+      }
+
+    oninputchange = (e) => {
+      console.log(e.target.value);
+      this.setState({
+        storageValue:e.target.value
+      })
+    }
+      render() {
+        const { storageValue } = this.state;
+        return (
+          <div className="App">
+            <div>cxh肝的第一个以太坊小demo</div>
+            <main className="container">
+              <div className="pure-g">
+                <input
+                  type="text"
+                  value={storageValue}
+                  onChange={this.oninputchange}
+                />
+                <button
+                  onClick={this.writeAndsetNumber}
+                  >点击设置介个数字</button>
+              </div>
+            </main>
+          </div>
+        );
+      }
+    }
+
+    export default App;
+
+
     
 
 ### 然后重点来了，前方高能！！！！
@@ -114,4 +220,65 @@
 
 语法对于这个没有后端基础的我，很是懵逼。整理一下常用的搞一搞。
 
-下面这个是
+下面这个是一个小的合约实例：
+
+    pragma solidity ^0.4.24;
+    contract Orders {
+
+	struct Order{
+        string uin;
+    		string name;
+    		uint16 ctime;
+    		string phone;
+    		string price;
+    		string lease_time;
+    }
+
+	Order[] public Orderlist;
+
+
+      // 在合约部署完成后，需要修改，用 getAddress 方法
+      address owenr = 0x348d80a445a4ffad846b491c5c673711a9ba74e8;// 用户
+        address user = getAddress();// owner: 0xa7d4831d700991304d690a078c6e65c5c281492c
+
+	function isOwner() public view returns (bool) {
+		return address(owenr) == address(user);
+	}
+
+	function getAddress() public view returns (address) {
+		return msg.sender;
+	}
+
+	// 写操作
+    function writeOrder(string order_id, string user_name, uint16 ctime, string phone, string price, string lease_time) public view returns (string rusult){
+		if (isOwner()) {
+			// 管理员，可不限时间修改
+			Orderlist.push(Order({
+                uin: order_id,
+                name: user_name,
+                ctime: ctime,
+          			phone: phone,
+          			price: price,
+          			lease_time: lease_time
+            }));
+          return '写入成功';
+		} else {
+		  return '您暂时没有此权限';
+		}
+
+	}
+
+	// 读操作
+	function readOrder(uint8 index) public view returns (string, string, uint16, string, string, string) {
+        // uint8 index = getIndex(order_id);
+        if (Orderlist.length==0){
+					return ('暂无数据', '暂无数据', 12345, '暂无数据', '暂无数据', '暂无数据');
+        } else {
+					Order storage result = Orderlist[index];
+					return (result.uin, result.name, result.ctime, result.phone, result.price, result.lease_time);
+        }
+
+	}
+
+}
+
