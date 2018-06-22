@@ -15,15 +15,19 @@
 
 #### 2.安装以太坊客户端，即上面说的 Dapp
 
-由于整个合约代码的执行需要一个虚拟的环境，所以需要安装一个是新以太坊虚拟机的节点，教程选择 TestRPC，现在已经改名字叫 ganache-cli,然后连 truffle一起安装好:
+由于整个合约代码的执行需要一个虚拟的环境，所以需要安装一个以太坊虚拟机的节点，教程选择 TestRPC，就是  ganache-cli,然后连 truffle一起安装好:
 
-`sudo npm install ganache-cli truffle` 
+`sudo npm install ganache-cli truffle` 注意 Windows 下不需要 sudo,sudo 是 Mac 下的权限
 
-可查看版本信息确认是否安装好
+可查看版本信息确认是否安装好：
+
+`npm ganache-cli -v `
+
+`npm truffle -v `
 
 #### 3.创建 Dapp 项目
 
-创建空文件夹 react-box,注意一定是空文件夹，然后命令行：
+创建空文件夹 react-unbox,注意一定是空文件夹，然后命令行：
 
 `truffle unbox react-box`
 
@@ -31,7 +35,7 @@
 
 #### 4.项目结构
 
-安装好项目后，会看到 tuffle 自动创建好的文件夹，就像 create-react-app 一样。
+安装好项目后，会看到 tuffle 自动创建好的文件夹。
 
 `contracts`:编写智能合约的文件夹，所有智能合约都放置这这个里面
 
@@ -39,7 +43,7 @@
 
 `src`:React 的前端调用代码
 
-`test`:只能合约测试用例文件夹
+`test`:智能合约测试用例文件夹
 
 这里需要先编译一下，也可以后来再编译：
 
@@ -47,7 +51,7 @@
 
 编译合约，会在项目根目录形成一个 build/contract/xxx.json 的 abi，用于前端调用
 
-注意每次写好智能合约都需要重新部署和编译
+注意每次修改了智能合约后都需要重新部署和编译。
 
 #### 5.编写智能合约，这个是最难的，公司项目花了两天两夜才勉勉强强写出来一个可用的 V1.0.0
 
@@ -72,15 +76,15 @@
 
 #### 6.通过 remix + MetaMask 将写好的合约部署到 Ropsten Test Network
 
-    1.在Google浏览器中安装 `MetaMask` 插件，小狐狸钱包，注册账号，记得账号在注册时会给你关键词，整个关键词一定要保存好！！！为了以后找回密码啥的
+    1.在Google浏览器中安装 `MetaMask` 插件，小狐狸钱包，注册账号，记得账号在注册时会给你关键词，整个关键词一定要保存好！！！不能透漏给 他人，也为了以后找回密码啥的
 
     2.打开 [remix-IDE](http://remix2.ju3ban.net)将合约拷贝到里面，这个编辑器是国内的，比国际的那个好用，这个坑我也是搞了好久才跳出来，mmp,有时候真的需要前辈指导一下，会少跳很多坑。
 
 ##### 注意
 
-    1.MetaMask钱包一定是在线状态,并且一定要有一定的以太币支付给旷工
+    1.MetaMask 钱包一定是在线状态,并且一定要有一定的以太币支付给旷工
 
-    2.确保Environment是Injected Web3，如果切换不过来，关掉浏览器重新启动
+    2.确保 Environment 是 Injected Web3，如果切换不过来，关掉浏览器重新启动
 
 如何搞到 Testnet 以太币，[查看链接](https://blog.csdn.net/fidelhl/article/details/52573274)
 
@@ -100,13 +104,13 @@
 
     1.上面部署完合约之后，记下合约地址，会到项目中，`src` 下就是前端代码这个项目前端是 React 的，查看 Vue 的，[戳-这个就是](https://github.com/cyhhao/eth-canvas)
     
-    2.将部署好的合约也拷贝到 `/contracts` 文件夹下然后按上面说的， `truffle-compile` 编译一下
+    2.将部署好的合约也拷贝到 `/contracts` 文件夹下然后按上面说的， `truffle-compile 合约目录` 编译一下
 
-然后在App.js中调用:
+然后在App.js中调用，下面代码仅供参考，真正可运行的代码以上面项目的代码为准:
 
 上代码：
 
-    import React, { Component } from 'react';// 壮哉我大 React
+    import React, { Component } from 'react';
     import SimpleStorageContract from '../build/contracts/Orders.json';//  引入 turffle compile 生成的 ABI 文件 
     import getWeb3 from './utils/getWeb3';// 引入 web3，这个方便与以太坊节点进行交互，完全不用关心 JSON RPC 的实现细节，JSON RPC 是啥？就是与区块链数据交换的格式；
     import axios from 'axios';// 请求数据的轻量级 AJAX
@@ -212,7 +216,7 @@
 
     
 
-### 然后重点来了，前方高能！！！！
+### 补充一点，solidity 的东西
 
 上面的那些都是小菜，下面的才是真正难的（相对来说，毕竟难者不会，会者不难
 
