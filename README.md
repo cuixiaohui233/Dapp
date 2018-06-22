@@ -222,65 +222,66 @@
 
 下面这个是一个小的合约实例，开始真的憋坏我，看文档看了就跟没看一样，抬手就不会写，后来机智如我，先将我的需求用 js 写出来，然后有目的的写 solidity,果然就好多啦，于是有了下面这个 V1.0.0 版本，注释略粗糙，旨在能看得懂简单代码，以后会系统学习 solidity 语法，到时再整理笔记：
 
-    pragma solidity ^0.4.24;// 声明 solidity 的版本
-    contract Orders {// 定义一个合约名字叫 Orders
+	pragma solidity ^0.4.24;// 声明 solidity 的版本
+	contract Orders {// 定义一个合约名字叫 Orders
 
-	// struct 是一种变量的类型，叫结构体，可以简单的理解为 js 中的对象类型
-	struct Order{
-		// 声明变量
-		string uin;//  string 类型
-		string name;
-		uint16 ctime;// 无符号整型，长度为16
-		string phone;
-		string price;
-		string lease_time;
-    	}
+		// struct 是一种变量的类型，叫结构体，可以简单的理解为 js 中的对象类型
+		struct Order{
+			// 声明变量
+			string uin;//  string 类型
+			string name;
+			uint16 ctime;// 无符号整型，长度为16
+			string phone;
+			string price;
+			string lease_time;
+		}
 
-	Order[] public Orderlist;// solidity 里的一种数据类型，可以理解为 js 中的数组 
+		Order[] public Orderlist;// solidity 里的一种数据类型，可以理解为 js 中的数组 
 
-      // 在合约部署完成后，需要修改，用 getAddress 方法
-      	address owenr = 0x348d80a445a4ffad846b491c5c673711a9ba74e8;// 用户 address 是 solidity 里的数据格式，表示用户地址 
-        address user = getAddress();// owner: 0xa7d4831d700991304d690a078c6e65c5c281492c
+		// 在合约部署完成后，需要修改，用 getAddress 方法
+		address owenr = 0x348d80a445a4ffad846b491c5c673711a9ba74e8;// 用户 address 是 solidity 里的数据格式，表示用户地址 
+		address user = getAddress();// owner: 0xa7d4831d700991304d690a078c6e65c5c281492c
 
-	// 声明一个方法，此方法的权限是 public,意为可供外部调用的方法，返回一个 Boolean 类型的值
-	function isOwner() public view returns (bool) {
-		return address(owenr) == address(user);
-	}
+		// 声明一个方法，此方法的权限是 public,意为可供外部调用的方法，返回一个 Boolean 类型的值
+		function isOwner() public view returns (bool) {
+			return address(owenr) == address(user);
+		}
 
-	function getAddress() public view returns (address) {
-		return msg.sender;
-	}
+		function getAddress() public view returns (address) {
+			return msg.sender;
+		}
 
-	// 写操作
-    function writeOrder(string order_id, string user_name, uint16 ctime, string phone, string price, string lease_time) public view returns (string rusult){
-		if (isOwner()) {
+		// 写操作
+		function writeOrder(string order_id, string user_name, uint16 ctime, string phone, string price, string lease_time) public view returns (string rusult){
+			if (isOwner()) {
 			// 管理员，可不限时间修改
-			Orderlist.push(Order({
-				uin: order_id,
-				name: user_name,
-				ctime: ctime,
-				phone: phone,
-				price: price,
-				lease_time: lease_time
-			}));
-          		return '写入成功';
-		} else {
-		  return '您暂时没有此权限';
+				Orderlist.push(Order({
+					uin: order_id,
+					name: user_name,
+					ctime: ctime,
+					phone: phone,
+					price: price,
+					lease_time: lease_time
+				}));
+				return '写入成功';
+			} else {
+				return '您暂时没有此权限';
+			}
+
+		}
+
+		// 读操作
+		function readOrder(uint8 index) public view returns (string, string, uint16, string, string, string) {
+			// uint8 index = getIndex(order_id);
+			if (Orderlist.length==0){
+				return ('暂无数据', '暂无数据', 12345, '暂无数据', '暂无数据', '暂无数据');
+			} else {
+				Order storage result = Orderlist[index];
+				return (result.uin, result.name, result.ctime, result.phone, result.price, result.lease_time);
+			}
+
 		}
 
 	}
 
-	// 读操作
-	function readOrder(uint8 index) public view returns (string, string, uint16, string, string, string) {
-        	// uint8 index = getIndex(order_id);
-		if (Orderlist.length==0){
-			return ('暂无数据', '暂无数据', 12345, '暂无数据', '暂无数据', '暂无数据');
-		} else {
-			Order storage result = Orderlist[index];
-			return (result.uin, result.name, result.ctime, result.phone, result.price, result.lease_time);
-		}
-
-	}
-
-}
-
+以上，就是一个以太坊 Dapp 的开发流程。进一步了解如何部署到公链，异步 Dapp-node 项目
